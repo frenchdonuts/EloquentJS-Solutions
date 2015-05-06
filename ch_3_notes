@@ -1,0 +1,75 @@
+Chapter 3 Notes - Functions
+
+Parameters and variables declared inside a function are: 
+	local to the function, re-created every time the function is called
+		this property allows for interesting things, one of them being the concept of closure
+	not visible from the outside (of the function)
+
+Closure
+	function multiplier(factor) {
+		return function(number) {
+			return number * factor
+		}
+	}
+	var twice = multiplier(2); // Notice that the local var,factor, is now "locked in"
+	console.log(twice(5)); // -> 10
+	// This reminds of of currying in Haskell
+
+	a function that "closes over" some local variables is called A closure (in the example above, the anonymous function that takes number as a parameter is a closure)
+
+	there is also the CONCEPT of closure - being able to reference a specific instance of local variables in an enclosing function
+
+
+Chapter 4 Notes - Data Structures: Objects and Arrays
+
+	Almost all values in JavaScript have PROPERTIES
+		"string".length is a property of string
+		you can access properties using either the dot or []
+			when you use dot, the part after the dot must be a valid variable name and it 	DIRECTLY NAMES the property
+			when you use [], the expression between the brackets is EVALUATED to get the 	property name. ex: "string"['length'] is the same as "string".length
+		properties that refer to FUNCTIONS are called METHODS
+			ex: "doh"['toUpperCase']() // -> "DOH"
+				Notice that even though the call to the toUpperCase function passes no parameters, the function somehow has access to the value "doh", the value whose property we called. This is explained in Ch 6.
+
+	Object - values that are arbitrary collections of properties
+		OBJECTS ARE MUTABLE
+			if you pass in an object into a function, the function can CHANGE the properties of the object!
+				ex: 
+				  var x = { "key": 0 }; inc_object(x); console.log(x) // -> { "key" : 1 }
+				compare this to:
+				  var x = 1; inc(x); console.log(x) // -> 1
+			SINCE ARRAYS ARE OBJECTS THE SAME THING APPLIES TO ARRAYS!!
+		properties whose names are not valide variables names must be quoted
+			ex: var descriptions = {
+					work: "Went to work",
+					"touched tree": "Touched a tree"
+			    };
+		use the binary operator, in, to see whether an object has a certain property
+			ex: "work" in descriptions // -> true
+			    "as;dkfj" in descriptions // -> false
+		loop over an object's properties using the for construct:
+			for (var key in object) {...}
+
+	Useful array methods:
+		push/pop
+		unshift/shift
+		join
+		indexOf
+		lastIndexOf (starts from the end of array)
+			[1,2,3,4,5].lastIndexOf(2); // -> 3
+		slice
+			[0,1,2,3,4].slice(2, 4) // -> [2, 3]
+			[0,1,2,3,4].slice(2) // -> [2, 3, 4]
+			removes: 
+				the first index and everything before it
+				everything after the second index
+
+	Functions have a special arguments object:
+		function addEntry(squirrel) {
+			var entry = {events: [], squirrel: squirrel};
+			for (var i = 1; i < arguments.length; i++) {	// has length property
+				entry.events.push(arguments[i]);			// access argument by index
+			}
+			journal.push(entry);
+		}
+		addEntry(true, "work", "touched tree", "pizza");
